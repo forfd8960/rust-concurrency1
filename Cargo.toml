@@ -4,3 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+tokio = { version = "1.42.0", features = ["full"] }
+
+[[bin]]
+name="wait_async"
+path="src/examples/wait_async.rs"
+
+
+[[bin]]
+name="counter"
+path="src/examples/counter.rs"
