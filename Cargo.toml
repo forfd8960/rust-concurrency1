@@ -18,3 +18,8 @@ path="src/examples/counter.rs"
 [[bin]]
 name="rw_counter"
 path="src/examples/rw_counter.rs"
+
+
+[[bin]]
+name="message_pass"
+path="src/examples/mpsc.rs"
