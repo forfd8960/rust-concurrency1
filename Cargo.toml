@@ -14,3 +14,7 @@ path="src/examples/wait_async.rs"
 [[bin]]
 name="counter"
 path="src/examples/counter.rs"
+
+[[bin]]
+name="rw_counter"
+path="src/examples/rw_counter.rs"
