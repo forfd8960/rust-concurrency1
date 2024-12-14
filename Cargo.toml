@@ -23,3 +23,7 @@ path="src/examples/rw_counter.rs"
 [[bin]]
 name="message_pass"
 path="src/examples/mpsc.rs"
+
+[[bin]]
+name="safe_collection"
+path="src/examples/safe_collection.rs"
