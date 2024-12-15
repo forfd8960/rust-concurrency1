@@ -4,6 +4,25 @@ use std::{
     thread,
 };
 
+#[derive(Debug, Clone)]
+pub struct ConcurrentData<T: Clone> {
+    pub data: Arc<Mutex<T>>,
+}
+
+impl<T: Clone> ConcurrentData<T> {
+    pub fn new(data: T) -> Self {
+        Self {
+            data: Arc::new(Mutex::new(data)),
+        }
+    }
+
+    pub fn data(&self) -> T {
+        let d = self.data.clone();
+        let v = d.lock().unwrap().clone();
+        v
+    }
+}
+
 /*
 pushing 2 to my_vec
 pushing 0 to my_vec
@@ -63,4 +82,40 @@ pub fn concurrent_hashmap(size: i32) {
 
     handles.into_iter().for_each(|h| h.join().unwrap());
     println!("concurrent_hashmap: {:?}", my_hash.lock().unwrap());
+}
+
+pub fn thread_safe_vec(size: i32) {
+    let data: Vec<i32> = Vec::new();
+    let my_vec = ConcurrentData::new(data);
+
+    let handles: Vec<_> = (0..size)
+        .map(|idx| {
+            let inner = my_vec.clone();
+            thread::spawn(move || {
+                println!("pushing {} to my_vec", idx);
+                inner.data.lock().unwrap().push(idx);
+            })
+        })
+        .collect();
+
+    handles.into_iter().for_each(|h| h.join().unwrap());
+    println!("{:?}", my_vec.data());
+}
+
+pub fn thread_safe_counter(limit: i32) -> i32 {
+    let safe_data = ConcurrentData::new(0);
+
+    let handles: Vec<_> = (0..limit)
+        .map(|idx| {
+            let inner = safe_data.clone();
+            thread::spawn(move || {
+                println!("increase data in thread: {}", idx);
+                *inner.data.lock().unwrap() += 1;
+            })
+        })
+        .collect();
+
+    handles.into_iter().for_each(|h| h.join().unwrap());
+    let data = safe_data.data();
+    data
 }
